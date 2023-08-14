@@ -1,22 +1,43 @@
-const express = require('express');
-const app = express();
-const PORT = 3000;
+const express = require("express");
+const path = require("path");
+const cors = require("cors");
 
-// Enable CORS for all routes
-app.use((req, res, next) => {
-  // Replace '*' with your actual frontend's domain if needed
-  res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  next();
-});
+const PORT = 3000;
+const app = express();
+
+const FRONT_ORIGIN1 = "http://127.0.0.1:5500";
+const SERVER_ORIGIN = `http://localhost:${PORT}`;
+const whitelist = [FRONT_ORIGIN1];
+
+app.use(express.static(path.join(__dirname, "public")));
+
+// For all
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (whitelist.indexOf(origin) !== -1 || !origin) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+  })
+);
 
 // Define a sample API endpoint
-app.get('/api/data', (req, res) => {
+app.get("/api/data", (req, res) => {
   const data = {
-    message: 'CORS in action: You successfully fetched data from a different origin!'
+    message: `CORS in action: You successfully fetched data from ${SERVER_ORIGIN}`,
   };
   res.json(data);
+});
+
+app.get("/api/products", (req, res, next) => {
+  res.json({ message: `This is from CORS whitelist` });
+});
+
+app.use((err, req, res, next) => {
+  res.status(500).json({ message: err.message || `Error` });
 });
 
 // Start the server

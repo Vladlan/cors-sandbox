@@ -4,23 +4,42 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CORS Example</title>
+
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <h1>CORS Example</h1>
-  <button id="fetchData">Fetch Data</button>
-  <p id="result"></p>
+  <div>
+    <img src="./img1.jpeg" alt="Camera">
+  </div>
+  <button id="fetchData">Fetch 'api/data'</button>
+  <button id="fetchProducts">Fetch 'api/products'</button>
+  <p id="result1"></p>
+  <p id="result2"></p>
   
   <script>
     const fetchDataButton = document.getElementById('fetchData');
-    const resultElement = document.getElementById('result');
+    const fetchProductsButton = document.getElementById('fetchProducts');
+    const resultElement1 = document.getElementById('result1');
+    const resultElement2 = document.getElementById('result2');
 
     fetchDataButton.addEventListener('click', async () => {
       try {
         const response = await fetch('http://localhost:3000/api/data');
         const data = await response.json();
-        resultElement.textContent = data.message;
+        resultElement1.textContent = data.message;
       } catch (error) {
-        resultElement.textContent = 'Error fetching data: ' + error.message;
+        resultElement1.textContent = 'Error fetching data: ' + error.message;
+      }
+    });
+
+    fetchProductsButton.addEventListener('click', async () => {
+      try {
+        const response = await fetch('http://localhost:3000/api/products');
+        const data = await response.json();
+        resultElement2.textContent = data.message;
+      } catch (error) {
+        resultElement2.textContent = 'Error fetching data: ' + error.message;
       }
     });
   </script>
