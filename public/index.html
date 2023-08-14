@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CORS Example</title>
+</head>
+<body>
+  <h1>CORS Example</h1>
+  <button id="fetchData">Fetch Data</button>
+  <p id="result"></p>
+  
+  <script>
+    const fetchDataButton = document.getElementById('fetchData');
+    const resultElement = document.getElementById('result');
+
+    fetchDataButton.addEventListener('click', async () => {
+      try {
+        const response = await fetch('http://localhost:3000/api/data');
+        const data = await response.json();
+        resultElement.textContent = data.message;
+      } catch (error) {
+        resultElement.textContent = 'Error fetching data: ' + error.message;
+      }
+    });
+  </script>
+</body>
+</html>
